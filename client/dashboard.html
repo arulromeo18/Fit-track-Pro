@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FitTrack Pro — Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="dashboard-page">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark sm">FT</div>
+      <span>FitTrack <strong>Pro</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-section="dashboard" onclick="showSection('dashboard',this)">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+      <a href="#" class="nav-item" data-section="workouts" onclick="showSection('workouts',this)">
+        <span class="nav-icon">🏋️</span> Workouts
+      </a>
+      <a href="#" class="nav-item" data-section="goals" onclick="showSection('goals',this)">
+        <span class="nav-icon">🎯</span> Goals
+      </a>
+      <a href="#" class="nav-item" data-section="suggestions" onclick="showSection('suggestions',this)">
+        <span class="nav-icon">💡</span> Suggestions
+      </a>
+      <a href="#" class="nav-item" data-section="pricing" onclick="showSection('pricing',this)">
+        <span class="nav-icon">💰</span> Pricing
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar" id="user-avatar">?</div>
+        <div>
+          <div class="user-name" id="user-name">Loading...</div>
+          <div class="user-plan" id="user-plan">Free Plan</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </aside>
+
+  <!-- Mobile header -->
+  <header class="mobile-header">
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+    <span class="mobile-logo">FitTrack Pro</span>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- ===== DASHBOARD SECTION ===== -->
+    <section id="section-dashboard" class="section active">
+      <div class="section-header">
+        <h2>Dashboard</h2>
+        <p id="motivational-msg" class="motivational">Loading...</p>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="stats-grid">
+        <div class="stat-card accent-orange">
+          <div class="stat-icon">🔥</div>
+          <div class="stat-value" id="stat-streak">0</div>
+          <div class="stat-label">Day Streak</div>
+        </div>
+        <div class="stat-card accent-blue">
+          <div class="stat-icon">📅</div>
+          <div class="stat-value" id="stat-weekly">0</div>
+          <div class="stat-label">This Week</div>
+        </div>
+        <div class="stat-card accent-green">
+          <div class="stat-icon">🔥</div>
+          <div class="stat-value" id="stat-calories">0</div>
+          <div class="stat-label">Weekly Calories</div>
+        </div>
+        <div class="stat-card accent-purple">
+          <div class="stat-icon">⏱️</div>
+          <div class="stat-value" id="stat-minutes">0</div>
+          <div class="stat-label">Weekly Minutes</div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="card chart-card">
+        <div class="card-header">
+          <h3>Weekly Activity</h3>
+          <span class="badge">Last 7 Days</span>
+        </div>
+        <canvas id="activityChart" height="100"></canvas>
+      </div>
+
+      <!-- Recent Workouts -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Recent Workouts</h3>
+          <button class="btn-sm" onclick="showSection('workouts', document.querySelector('[data-section=workouts]'))">View All</button>
+        </div>
+        <div id="recent-workouts-list" class="workout-list">
+          <div class="empty-state">No workouts yet. Log your first one!</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WORKOUTS SECTION ===== -->
+    <section id="section-workouts" class="section">
+      <div class="section-header">
+        <h2>Workouts</h2>
+        <button class="btn-primary sm" onclick="openWorkoutModal()">+ Log Workout</button>
+      </div>
+
+      <div class="card">
+        <div id="workouts-list" class="workout-list">
+          <div class="empty-state">No workouts logged yet.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== GOALS SECTION ===== -->
+    <section id="section-goals" class="section">
+      <div class="section-header">
+        <h2>Goals</h2>
+        <button class="btn-primary sm" onclick="openGoalModal()">+ Add Goal</button>
+      </div>
+      <div id="goals-list" class="goals-grid">
+        <div class="empty-state">No goals set yet.</div>
+      </div>
+    </section>
+
+    <!-- ===== SUGGESTIONS SECTION ===== -->
+    <section id="section-suggestions" class="section">
+      <div class="section-header">
+        <h2>Smart Suggestions</h2>
+        <p>Personalized insights based on your activity</p>
+      </div>
+      <div id="suggestions-list" class="suggestions-grid">
+        <div class="empty-state">Loading suggestions...</div>
+      </div>
+      <div class="card analysis-card" id="analysis-card" style="display:none">
+        <h3>Your Analysis</h3>
+        <div id="analysis-body" class="analysis-grid"></div>
+      </div>
+    </section>
+
+    <!-- ===== PRICING SECTION ===== -->
+    <section id="section-pricing" class="section">
+      <div class="section-header">
+        <h2>Pricing</h2>
+        <p>Simple, transparent pricing</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="plan-badge">Current</div>
+          <h3>Free</h3>
+          <div class="plan-price">₹0<span>/month</span></div>
+          <ul class="plan-features">
+            <li>✅ Workout logging</li>
+            <li>✅ Basic stats</li>
+            <li>✅ Goal setting</li>
+            <li>✅ Streak tracking</li>
+            <li>❌ Smart suggestions</li>
+            <li>❌ Advanced analytics</li>
+            <li>❌ Weekly reports</li>
+          </ul>
+          <button class="btn-outline" disabled>Current Plan</button>
+        </div>
+        <div class="pricing-card featured">
+          <div class="plan-badge pro">Pro</div>
+          <h3>Pro</h3>
+          <div class="plan-price">₹199<span>/month</span></div>
+          <ul class="plan-features">
+            <li>✅ Everything in Free</li>
+            <li>✅ Smart AI suggestions</li>
+            <li>✅ Advanced analytics</li>
+            <li>✅ Goal insights</li>
+            <li>✅ Weekly progress reports</li>
+            <li>✅ Priority support</li>
+            <li>✅ Export data</li>
+          </ul>
+          <button class="btn-primary" onclick="alert('Pro plan coming soon! 🚀')">Upgrade to Pro</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Workout Modal -->
+  <div class="modal-overlay hidden" id="workout-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="workout-modal-title">Log Workout</h3>
+        <button class="modal-close" onclick="closeWorkoutModal()">✕</button>
+      </div>
+      <form onsubmit="submitWorkout(event)">
+        <div class="form-group">
+          <label>Workout Type</label>
+          <input type="text" id="w-type" placeholder="e.g. Running, Yoga, Weights" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Duration (mins)</label>
+            <input type="number" id="w-duration" placeholder="30" min="1" required />
+          </div>
+          <div class="form-group">
+            <label>Calories Burned</label>
+            <input type="number" id="w-calories" placeholder="250" min="0" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="w-date" required />
+          </div>
+          <div class="form-group">
+            <label>Intensity</label>
+            <select id="w-intensity">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Notes <span class="hint">(optional)</span></label>
+          <textarea id="w-notes" placeholder="How did it go?" rows="2"></textarea>
+        </div>
+        <input type="hidden" id="w-edit-id" />
+        <div id="workout-error" class="form-error hidden"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-outline" onclick="closeWorkoutModal()">Cancel</button>
+          <button type="submit" class="btn-primary" id="workout-submit-btn">Save Workout</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Goal Modal -->
+  <div class="modal-overlay hidden" id="goal-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Add Goal</h3>
+        <button class="modal-close" onclick="closeGoalModal()">✕</button>
+      </div>
+      <form onsubmit="submitGoal(event)">
+        <div class="form-group">
+          <label>Goal Type</label>
+          <select id="g-type" onchange="updateGoalFields()">
+            <option value="workouts_per_week">Workouts per Week</option>
+            <option value="calories_per_week">Calories per Week</option>
+            <option value="minutes_per_week">Minutes per Week</option>
+            <option value="monthly_workouts">Monthly Workouts</option>
+            <option value="weight_loss">Weight Loss (kg)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Goal Label</label>
+          <input type="text" id="g-label" placeholder="e.g. Work out 4x a week" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label id="g-target-label">Target</label>
+            <input type="number" id="g-target" placeholder="4" min="1" step="0.1" required />
+          </div>
+          <div class="form-group" id="g-start-group" style="display:none">
+            <label>Current Weight (kg)</label>
+            <input type="number" id="g-start" placeholder="80" min="1" step="0.1" />
+          </div>
+        </div>
+        <div id="goal-error" class="form-error hidden"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-outline" onclick="closeGoalModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Save Goal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
