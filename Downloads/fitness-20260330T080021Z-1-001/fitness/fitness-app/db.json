@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "id": "e2242d0d-bbf9-4470-927f-7c6c1f596e3a",
+      "name": "ARUL",
+      "email": "arulkumarv1108@gmail.com",
+      "password": "$2a$10$pqfd.Tnqp2.gwV5kuBbyIefdnaOT0AYIPwemSG5G.NcL7HUXqJUEK",
+      "plan": "free",
+      "createdAt": "2026-03-30T08:14:19.236Z",
+      "streak": 1,
+      "lastWorkoutDate": "2026-03-30T08:15:07.018Z"
+    }
+  ],
+  "workouts": [
+    {
+      "id": "faf45eb2-3959-470e-918f-5a81ac4aff2b",
+      "userId": "e2242d0d-bbf9-4470-927f-7c6c1f596e3a",
+      "type": "Weights",
+      "duration": 30,
+      "calories": 250,
+      "date": "2026-03-30",
+      "notes": "",
+      "intensity": "medium",
+      "createdAt": "2026-03-30T08:15:07.012Z"
+    }
+  ],
+  "goals": []
+}
