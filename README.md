@@ -1,6 +1,15 @@
 # FitTrack Pro 💪
+## 🌐 Live Demo
+https://fit-track-pro-5wqk.onrender.com
+## 📸 Screenshot
 
-A full-stack fitness tracking web application built with Node.js, Express, and Vanilla JavaScript.
+![Dashboard](dashboard.png)
+## 👨‍💻 Author
+Arul
+
+- GitHub: https://github.com/arulromeo18
+  
+A full-stack fitness tracking application with authentication, goal tracking, analytics, and smart suggestions. Built using Node.js, Express, and Vanilla JavaScript, and deployed on the cloud.
 
 ## Features
 - 🔐 JWT Authentication (Register/Login)
@@ -42,7 +51,7 @@ http://localhost:3000
 
 ## Project Structure
 ```
-fitness-app/
+Fit-track-Pro/
 ├── server/
 │   ├── server.js
 │   ├── middleware/auth.js
